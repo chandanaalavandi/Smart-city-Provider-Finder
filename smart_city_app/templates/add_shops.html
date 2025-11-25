@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shop Registration Form</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+  <style>
+    body
+    {
+        background-color: rgb(238, 238, 238);
+    }
+    .form-container {
+      max-width: 80%;
+      margin: 100px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #283593;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #283593;
+      outline: none;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .form-group input[type="file"] {
+      padding: 5px;
+    }
+
+    .form-group input[type="submit"] {
+      grid-column: span 2;
+      background-color: #283593;
+      color: white;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-group input[type="submit"]:hover {
+      background-color: #1a237e;
+    }
+
+    .tick-mark {
+      position: absolute;
+      right: 10px;
+      top: 35px;
+      font-size: 1rem;
+      color: green;
+      display: none;
+    }
+
+    .valid .tick-mark {
+      display: inline-block;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group input[type="submit"] {
+        grid-column: span 1;
+      }
+
+      nav ul {
+        display: none;
+      }
+
+      nav button {
+        display: block;
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      nav ul.show {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        background-color: #283593;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        padding: 15px;
+      }
+    }
+    .mobile-menu-button {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-button {
+      display: inline-block;
+    }
+  }
+  </style>
+</head>
+<body>
+{% if error %}
+<script>
+  alert('{{message}}');
+</script>
+{%endif%}
+   <nav>
+        <a href="{% url 'index' %}" class="logo">Smart City</a>
+        <ul>
+            <li><a href="{% url 'add_shop' %}">Add Shop</a></li>
+            <li><a href="{% url 'view_shops_provider' %}">View Shops</a></li>
+            <li><a href="{% url 'index' %}">Log Out</a></li>
+        </ul>
+        <button class="mobile-menu-button">
+          <span><i class="fas fa-bars"></i></span>
+        </button>
+    </nav>
+
+    <div class="form-container">
+        <h1>Shop Registration Form</h1>
+        <form action="{% url 'save_shop' %}" method="post" enctype="multipart/form-data" id="registrationForm">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="shop-name">Shop Name:</label>
+              <input type="text" id="shop-name" name="shop-name" required>
+              <span class="tick-mark">✔</span>
+          </div>
+            <div class="form-group">
+                <label for="shop-category">Shop Category:</label>
+                <select id="shop-category" name="shop-category" required>
+                    <option value="">Select Category</option>
+                    {% for s in services %}
+                    <option value="{{ s.service_name }}">{{ s.service_name }}</option>
+                    {% endfor %}
+                </select>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="Address">Address:</label>
+                <input type="text" id="Address" name="Address" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="city-name">City Name:</label>
+                <select id="city-name" name="city-name" required>
+                    <option value="">Select City</option>
+                    <option value="Hubli">Hubli</option>
+                    <option value="Gadag">Gadag</option>
+                    <option value="Dharwad">Dharwad</option>
+                    <option value="Bellary">Bellary</option>
+                    <option value="Lakshameshwar">Lakshameshwar</option>
+                </select>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="area">Area</label>
+                <select id="area" name="Area" required>
+                    <option value="">Select Area</option>
+                    <option value="Vidyanagar">Vidyanagar</option>
+                    <option value="Rajnagar">Rajnagar</option>
+                    <option value="HDMC Road">HDMC Road</option>
+                    <option value="APMC Road">APMC Road</option>
+                    <option value="Vidyagiri">Vidyagiri</option>
+                </select>
+                <span class="tick-mark">✔</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="owner-name">Shop Owner Name:</label>
+                <input type="text" id="owner-name" name="owner-name" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="contact-number">Contact Number:</label>
+                <input type="tel" id="contact-number" name="contact-number" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="services">Services:</label>
+                <textarea id="services" name="services" required></textarea>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="shop-photo">Shop Photo:</label>
+                <input type="file" id="shop-photo" name="shop-photo" accept="image/*" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="other-photos">Shop Other Photos:</label>
+                <input type="file" id="other-photos" name="other-photos" accept="image/*" multiple>
+            </div>
+            <div class="form-group">
+                <label for="owner-photo">Shop Owner Photo:</label>
+                <input type="file" id="owner-photo" name="owner-photo" accept="image/*" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="openclose">Opening and Closing Time:</label>
+                <input type="text" id="openclose" name="openclose" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="latitude">Latitude:</label>
+                <input type="text" id="latitude" name="latitude" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <label for="longitude">Longitude:</label>
+                <input type="text" id="longitude" name="longitude" required>
+                <span class="tick-mark">✔</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register Shop">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('input, select, textarea');
+
+        inputs.forEach(input => {
+          input.addEventListener('input', function () {
+            if (input.checkValidity()) {
+              input.parentElement.classList.add('valid');
+            } else {
+              input.parentElement.classList.remove('valid');
+            }
+          });
+        });
+
+        let btn = document.querySelector("button");
+        let ul = document.querySelector("ul");
+
+        btn.onclick = function() {
+            ul.classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>

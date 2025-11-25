@@ -1,0 +1,191 @@
+{% load static %}
+<!Doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <!-- meta data -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <title>Smart city service provider</title>
+		<link rel="shortcut icon" type="image/icon" href="{% static 'assets/logo/favicon.png' %}"/>
+		<link rel="stylesheet" href="{% static 'assets/css/linearicons.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/flaticon.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/slick.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/css/slick-theme.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/css/bootsnav.css' %}">	
+        <link rel="stylesheet" href="{% static 'assets/css/new_design.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/registration.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <!-- jQuery for Bootstrap dropdown functionality -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Bootstrap JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+	<body>    
+		<!-- top-area Start -->
+        <header>
+            <div class="container header-container">
+                <div class="logo">
+                    <div class="logo-icon">🔍</div>
+                    <h1>Smart City</h1>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li class="dropdown">
+                            <a href="#">Register</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'register' %}">User</a></li>
+                                <li><a href="{% url 'service_provider' %}">Service Provider</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#">Login</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'login' %}">User</a></li>
+                                <li><a href="{% url 'login_service' %}">Service Provider</a></li>
+                            </ul>
+                        </li>
+                       
+                    </ul>
+                </nav>
+                
+               
+            </div>
+        </header>
+        <!-- top-area End -->
+        
+        <!--Registration Form-->
+    <section>
+        <div class="container-reg">
+            <!-- Image Side for tablet and laptop -->
+            <div class="image-side">
+                <img src="{% static 'assets/images/forms/signup-2.jpg' %}" alt="Sign Up Image">
+            </div>
+    
+            <!-- Form Side -->
+            <div class="form-side">
+                <form id="registrationForm"  action="{% url 'save_service_provider'%}" method="POST">
+                    {%csrf_token%}
+                    <h2>Service Provider Sign Up</h2>
+                    <!-- Input Group for Full Name -->
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="Full Name" name="full_name" id="full_name" required>
+                        <span class="error-message" id="name-error"></span>
+                    </div>
+
+                    <!-- Input Group for Email -->
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="Email" name="emailid" id="emailid" required>
+                        <span class="error-message" id="email-error"></span>
+                    </div>
+    
+                    <!-- Input Group for Address -->
+                    <div class="input-group">
+                        <i class="fas fa-address-card"></i>
+                        <input type="text" placeholder="Address" name="address" required>
+                    </div>
+
+                    <!-- Input Group for Phone Number -->
+                    <div class="input-group">
+                        <i class="fas fa-phone-square"></i>
+                        <input type="text" placeholder="Phone Number" name="phoneno" id="phoneno" required>
+                        <span class="error-message" id="phone-error"></span>
+                    </div>
+
+                    <!-- Input Group for Birth Date -->
+                    <div class="input-group">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="date" placeholder="Birth Date" name="birthdate" required>
+                    </div>
+    
+                    <!-- Input Group for Password -->
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" id="password" required>
+                        <span class="error-message" id="password-error"></span>
+                    </div>
+                    
+                    <!-- Input Group for Confirm Password -->
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Confirm Password" name="confirmpassword" id="confirmpassword" required>
+                        <span class="error-message" id="confirmpassword-error"></span>
+                    </div>
+    
+                    <!-- Sign Up Button -->
+                    <input type="submit" onclick="validateForm()" value="Sign UP">
+                    <div class="loading" id="loading" style="display:none;">Loading...</div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'assets/js/jquery.js' %}"></script>
+    <script>
+        function validateForm() {
+            event.preventDefault(); // Prevent form submission until validation
+            var fullName = document.getElementById("full_name").value;
+            var email = document.getElementById("emailid").value;
+            var phoneno = document.getElementById("phoneno").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmpassword").value;
+
+            var namePattern = /^[a-zA-Z\s]+$/;
+            var phonePattern = /^\d{10}$/;
+            var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+            // Name validation
+            if (!namePattern.test(fullName)) {
+                document.getElementById("name-error").innerText = "Name should contain only alphabets and spaces.";
+                return false;
+            } else {
+                document.getElementById("name-error").innerText = "";
+            }
+
+            // Email validation
+            if (email === "") {
+                document.getElementById("email-error").innerText = "Email is required.";
+                return false;
+            } else {
+                document.getElementById("email-error").innerText = "";
+            }
+
+            // Phone number validation
+            if (!phonePattern.test(phoneno)) {
+                document.getElementById("phone-error").innerText = "Phone number must be exactly 10 digits.";
+                return false;
+            } else {
+                document.getElementById("phone-error").innerText = "";
+            }
+
+            // Password validation
+            if (!passwordPattern.test(password)) {
+                document.getElementById("password-error").innerText = "Password must be at least 8 characters, contain at least one number, one uppercase, and one lowercase letter.";
+                return false;
+            } else {
+                document.getElementById("password-error").innerText = "";
+            }
+
+            // Confirm password validation
+            if (password !== confirmPassword) {
+                document.getElementById("confirmpassword-error").innerText = "Passwords do not match.";
+                return false;
+            } else {
+                document.getElementById("confirmpassword-error").innerText = "";
+            }
+
+            // If all validations pass
+            document.getElementById("registrationForm").submit(); // Submit the form
+        }
+    </script>
+</body>
+</html>

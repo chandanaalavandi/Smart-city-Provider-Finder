@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/services-view.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .search-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .search-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-subtitle {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .input-label {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .input-label i {
+            margin-right: 0.5rem;
+            color: #6366f1;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #f9fafb;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        /* Dropdown styling */
+        .dropdown-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .dropdown-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+        
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .dropdown-content div {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .dropdown-content div:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        /* Tag suggestions */
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .suggestion-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .suggestion-tag:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tag-yellow {
+            background-color: #fef3c7;
+            border-color: #fcd34d;
+            color: #92400e;
+        }
+        
+        .tag-green {
+            background-color: #dcfce7;
+            border-color: #86efac;
+            color: #166534;
+        }
+        
+        .tag-blue {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+            color: #1e40af;
+        }
+        
+        .tag-orange {
+            background-color: #ffedd5;
+            border-color: #fdba74;
+            color: #9a3412;
+        }
+        
+        /* Search button */
+        .search-button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        
+        .search-button {
+            padding: 0.75rem;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            min-width: 200px;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+        
+        .search-button:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(79, 70, 229, 0.25);
+        }
+        
+        
+        
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .form-group {
+                width: 100%;
+            }
+            
+            .search-button-container {
+                justify-content: center;
+            }
+            
+            .search-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        .hotel-card
+        {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Keep the original menu -->
+    <nav>
+        <a href="{% url 'index' %}" class="logo">Smart City</a>
+        <ul>
+            <li><a href="{% url 'index' %}">Log Out</a></li>
+        </ul>
+        
+    </nav>
+    <form action="{% url 'fetch_providers_list' %}" method="post">
+        {% csrf_token %}
+        <div class="search-container">
+            <div class="search-header">
+                <h2 class="search-title">Search Services</h2>
+                <p class="search-subtitle">Use the fields below to find services in required area</p>
+            </div> 
+            <div class="search-form">
+                <div class="form-group">
+                    <label class="input-label">
+                        <i class="fas fa-tools"></i>
+                        Services
+                    </label>
+                    <div class="dropdown-wrapper">
+                        <input
+                            type="text"
+                            name="service"
+                            id="serviceInput"
+                            class="input-field"
+                            placeholder="Search for services..."
+                            oninput="filterRecommendations('serviceInput', 'service-dropdown-content', services)"
+                            onfocus="showDropdown('service-dropdown-content')"
+                        >
+                        <i class="fas fa-search dropdown-icon"></i>
+                        <div id="service-dropdown-content" class="dropdown-content"></div>
+                    </div>
+                    <div id="random-services" class="suggestions"></div>
+                </div>
+                <div class="form-group">
+                    <label class="input-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Location
+                    </label>
+                    <div class="dropdown-wrapper">
+                        <input
+                            type="text"
+                            id="locationInput"
+                            name="city"
+                            class="input-field"
+                            placeholder="Enter your city..."
+                            oninput="filterRecommendations('locationInput', 'location-dropdown-content', cities)"
+                            onfocus="showDropdown('location-dropdown-content')"
+                        >
+                        <i class="fas fa-location-arrow dropdown-icon"></i>
+                        <div id="location-dropdown-content" class="dropdown-content"></div>
+                    </div>
+                    <div id="random-cities" class="suggestions"></div>
+                </div>
+                <div class="form-group">
+                    <label class="input-label">
+                        <i class="fas fa-list"></i>
+                        Area
+                    </label>
+                    <div class="dropdown-wrapper">
+                        <input
+                            type="text"
+                            name="area"
+                            id="categoryInput"
+                            class="input-field"
+                            placeholder="Select a category..."
+                            oninput="filterRecommendations('categoryInput', 'category-dropdown-content', predefinedOptions)"
+                            onfocus="showDropdown('category-dropdown-content')"
+                        >
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                        <div id="category-dropdown-content" class="dropdown-content"></div>
+                    </div>
+                    <div id="random-categories" class="suggestions"></div>
+                </div>
+              
+            </div>
+            <div class="search-button-container">
+                    <input type="submit" value="Search Now" class="search-button">
+            </div>
+        </div>
+    </form>  
+    {% if flag %}
+        {% for shop in shops %}
+            <a href="{% url 'view_individual_shop' shop.shop_id shop.shop_category shop.area shop.city_name %}" class="hotel-card-link">
+                <div class="hotel-card">
+                    <div class="hotel-images">
+                        <img src="{{MEDIA_URL}}/shop_photo/{{shop.shop_photo}}" alt="Meritas Auberge Pool" class="main-image">
+                    </div>
+                    <div class="hotel-info">
+                        <div>
+                            <h2 class="hotel-name">{{shop.shop_name}}</h2>
+                            <a class="location">{{shop.owner_name}}</a>
+                            <p class="location-detail">{{shop.contact_number}}</p>
+                            <div class="benefits">
+                                {{shop.address}}
+                            </div>
+                            <span class="couple-friendly">{{shop.services}}</span>
+                            <div class="benefits">
+                                {{shop.openclose}}
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif %}  
+    <script>
+        const services = [
+            {% for service in services %} "{{ service.service_name }}", {% endfor %}
+            "School", "College", "Hotel", "Hospital" 
+        ];
+
+        const predefinedOptions = [
+            "Vidyanagar", "Rajnagar", "HDMC Road", "APMC Road", "Vidyagiri"
+        ];
+
+        const cities = [
+            "Hubli", "Gadag", "Dharwad", "Bellary", "Lakshameshwar"
+        ];
+        function filterRecommendations(inputId, dropdownId, list) {
+            let input = document.getElementById(inputId).value.toLowerCase();
+            let dropdown = document.getElementById(dropdownId);
+            dropdown.innerHTML = '';
+            let filteredItems = list.filter(item => item.toLowerCase().includes(input));
+
+            if (filteredItems.length > 0) {
+                filteredItems.forEach(item => {
+                    let option = document.createElement('div');
+                    option.textContent = item;
+                    option.onclick = function() {
+                        document.getElementById(inputId).value = item;
+                        dropdown.classList.remove('show');
+                    };
+                    dropdown.appendChild(option);
+                });
+                dropdown.classList.add('show');
+            } else {
+                dropdown.classList.remove('show');
+            }
+        }
+
+        // Function to show dropdown
+        function showDropdown(id) {
+            // First close all dropdowns
+            const dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+            // Then open the requested one
+            document.getElementById(id).classList.add('show');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.input-field')) {
+                const dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        // Function to create suggestion tags
+        function createSuggestionTags(containerId, items, inputId, colorClasses) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                const colorClass = colorClasses[index % colorClasses.length];
+                const tag = document.createElement('span');
+                tag.textContent = item;
+                tag.classList.add('suggestion-tag', colorClass);
+                tag.onclick = function() {
+                    document.getElementById(inputId).value = item;
+                };
+                container.appendChild(tag);
+            });
+        }
+        // Create tags for services
+        createSuggestionTags(
+            'random-services', 
+            ["parlor", "grocery shop", "hotel", "Hospital"], 
+            'serviceInput',
+            ['tag-blue', 'tag-blue', 'tag-blue', 'tag-blue']
+        );
+        // Create tags for categories
+        createSuggestionTags(
+            'random-categories', 
+            ["Vidyanagar", "Rajnagar", "HDMC Road", "APMC Road"],
+            'categoryInput',
+            ['tag-yellow', 'tag-yellow', 'tag-yellow', 'tag-yellow']
+        );
+        
+        // Create tags for cities
+        createSuggestionTags(
+            'random-cities',
+            ["Hubli", "Gadag", "Dharwad", "Bellary"],
+            'locationInput',
+            ['tag-green', 'tag-green', 'tag-green', 'tag-green']
+        );
+    </script>
+</body>
+</html>

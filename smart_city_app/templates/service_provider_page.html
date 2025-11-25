@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Side bar menu</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+  <style>
+     .mobile-menu-button {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-button {
+      display: inline-block;
+    }
+  }
+  </style>
+</head>
+<body>
+   <nav>
+        <a href="{% url 'index' %}" class="logo">Smart City</a>
+
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{% url 'add_shop' %}">Add Shop</a></li>
+            <li><a href="{% url 'view_shops_provider' %}">View Shops</a></li>
+            <li><a href="{% url 'index' %}">Log Out</a></li>
+
+        </ul>
+
+        <button class="mobile-menu-button">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+    </nav>
+    <script>
+        let btn = document.querySelector("button");
+        let ul = document.querySelector("ul");
+
+        btn.onclick = function() {
+            ul.classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>

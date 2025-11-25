@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Side bar menu</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+  <style>
+     :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark);
+            color: white;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary);
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover, .nav-item.active .nav-link {
+            color: white;
+        }
+        
+        .nav-icon {
+            margin-right: 0.5rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+        
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .main-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card-title {
+            color: var(--gray);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .stat-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .stat-card-icon.blue {
+            background-color: var(--primary);
+        }
+        
+        .stat-card-icon.green {
+            background-color: var(--success);
+        }
+        
+        .stat-card-icon.orange {
+            background-color: var(--warning);
+        }
+        
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .stat-card-change {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--success);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .card-action {
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--gray);
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d90166;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .mobile-menu-button {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-button {
+      display: inline-block;
+    }
+  }
+  </style>
+</head>
+<body>
+   <nav>
+        <a href="{% url 'index' %}" class="logo">Smart Service</a>
+
+        <ul>
+            <li><a href="{% url 'admin_page' %}">Dashboard</a></li>
+            <li><a href="{% url 'users_list' %}">Users</a></li>
+            <li><a href="{% url 'services' %}">Services</a></li>
+            <li><a href="{% url 'service_provider_list' %}">Service Providers</a></li>
+            <li><a href="{% url 'index' %}">Log Out</a></li>
+
+        </ul>
+
+        <button class="mobile-menu-button">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+    </nav>
+    <div class="dashboard">
+        <main>
+            <div class="main-header">
+                <h1 class="main-title">Dashboard Overview</h1>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <h3 class="stat-card-title">Total Services</h3>
+                        <div class="stat-card-icon blue">🛠️</div>
+                    </div>
+                    <div class="stat-card-value">{{service_count}}</div>
+                   
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <h3 class="stat-card-title">Registered Users</h3>
+                        <div class="stat-card-icon green">👥</div>
+                    </div>
+                    <div class="stat-card-value">{{user_count}}</div>
+                    
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <h3 class="stat-card-title">Service Providers</h3>
+                        <div class="stat-card-icon orange">👨‍💼</div>
+                    </div>
+                    <div class="stat-card-value">{{provider_count}}</div>
+                    
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Services</h2>
+                        <a href="{% url 'services' %}" class="card-action">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sr in services %}
+                                <tr> 
+                                    <td>{{sr.service_name}}</td>   
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Users</h2>
+                        <a href="{% url 'users_list' %}" class="card-action">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>   
+                                    <th>Phone Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usr in users %}
+                                <tr>
+                                    <td>{{usr.name}}</td>
+                                    <td>{{usr.emailid}}</td>
+                                    <td>{{usr.phoneno}}</td>  
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Service Providers</h2>
+                        <a href="#" class="card-action">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Provider Name</th>
+                                    <th>Email ID</th>
+                                    <th>Phone Number</th>      
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pr in service_provider %}
+                                <tr>
+                                    <td>{{pr.name}}</td>
+                                    <td>{{pr.emailid}}</td>
+                                    <td>{{pr.phoneno}}</td> 
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add Service Modal -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Service</h2>
+                <button class="modal-close" onclick="closeAddServiceModal()">&times;</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label class="form-label" for="serviceName">Service Name</label>
+                    <input type="text" id="serviceName" class="form-control" placeholder="Enter service name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="serviceCategory">Category</label>
+                    <input type="text" id="serviceCategory" class="form-control" placeholder="Enter service category">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="serviceDescription">Description</label>
+                    <textarea id="serviceDescription" class="form-control" placeholder="Enter service description" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="serviceStatus">Status</label>
+                    <select id="serviceStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="closeAddServiceModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let btn = document.querySelector("button");
+        let ul = document.querySelector("ul");
+
+        btn.onclick = function() {
+            ul.classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>

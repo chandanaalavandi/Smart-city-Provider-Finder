@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Side bar menu</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/table-design1.css' %}">
+  <style>
+    .services-block{
+        margin:100px auto;
+        width:95%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .add-service, .view-service
+    {
+        width:50%;
+        padding:10px;
+        border:2px solid rgb(236, 236, 236);
+    }
+    .view-service
+    {
+        background-color: #ffffff;
+        width:70%;
+        margin:0px auto;
+    }
+    .add-service
+    {
+        background-color: #2973B2;
+    }
+    label
+    {
+        color:white;
+        padding:0px;
+        font-size: 1rem;
+    }
+    input[type="text"]
+    {
+        padding:10px;
+        width:80%;
+        margin:10px 0px;
+        border: 1px solid gainsboro;
+        border-radius: 3px;
+        outline: none;   
+    }
+    input[name="add"]
+    {
+        background-color: #9ACBD0;
+        padding:10px;
+        width:20%;
+        border: none;
+        font-size: 0.9rem;
+        color: rgb(0, 0, 0);
+        font-weight: 500;
+    }
+    input[name="edit"]
+    {
+        background-color: #EFB036;
+        padding:10px;
+        width:20%;
+        border: none;
+        font-size: 0.9rem;
+        color: rgb(0, 0, 0);
+        font-weight: 500;
+    }
+    input[name="delete"]
+    {
+        background-color: #B82132;
+        padding:10px;
+        width:20%;
+        border: none;
+        font-size: 0.9rem;
+        color: rgb(245, 245, 245);
+        font-weight: 500;
+    }
+    .mobile-menu-button {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-button {
+      display: inline-block;
+    }
+  }
+  </style>
+</head>
+<body>
+    {% if error %}
+        <script>
+            alert('{{message}}');
+        </script>
+    {% endif %}
+
+   <nav>
+        <a href="{% url 'index' %}" class="logo">Smart City</a>
+        <ul>
+            <li><a href="{% url 'admin_page' %}">Dashboard</a></li>
+            <li><a href="{% url 'users_list' %}">Users</a></li>
+            <li><a href="{% url 'services' %}">Services</a></li>
+            <li><a href="{% url 'service_provider_list' %}">Service Providers</a></li>
+            <li><a href="{% url 'index' %}">Log Out</a></li>
+        </ul>
+        <button class="mobile-menu-button">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+    </nav>
+    <!--Add and View services section-->
+    <section>
+        <div class="services-block">
+            <div class="add-service">
+                <form action="{% url 'add_services' %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <label>Enter Service Name</label>
+                        <input type="text" name="service_name" required/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Add" name="add"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+            <div class="view-service">
+                <h1>Service Details</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    {% for s in services %}
+                    <tbody>
+                        <tr>
+                            <td>{{ s.service_name }}</td>
+                            <td>
+                                <form action="{% url 'delete_service' %}" method="post">
+                                    {%csrf_token%}
+                                    <input type="hidden" value="{{s.service_id}}" name="id"/>
+                                    <input type="submit" name="delete" value="Delete"/>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {%endfor%}
+                </table>
+            </div>
+    </section>
+    <script>
+        let btn = document.querySelector("button");
+        let ul = document.querySelector("ul");
+
+        btn.onclick = function() {
+            ul.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>

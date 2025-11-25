@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalConnect - Find Services Near You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #e74c3c;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-left: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+            
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+                .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            list-style: none;
+            z-index: 200;
+            min-width: 200px;
+            
+        }
+
+        .dropdown-menu li {
+            padding: 8px 20px;
+           
+        }
+
+        .dropdown-menu li a {
+            color: var(--dark);
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu li a:hover {
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            padding: 100px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-box {
+            display: flex;
+            background-color: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .search-icon {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-icon:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .service-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            text-align: center;
+            max-width: 300px;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .step h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .step p {
+            color: #7f8c8d;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            text-align: center;
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .testimonial-text {
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+        
+        .author-info h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #34495e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .auth-buttons {
+                margin-top: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .search-box {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-input {
+                width: 100%;
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .search-icon {
+                width: 100%;
+                padding: 15px;
+                border-radius: 0 0 10px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">🔍</div>
+                <h1>Smart City</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#">Register</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'register' %}">User</a></li>
+                            <li><a href="{% url 'service_provider' %}">Service Provider</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Login</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'login' %}">User</a></li>
+                            <li><a href="{% url 'login_service' %}">Service Provider</a></li>
+                        </ul>
+                    </li>
+                   
+                </ul>
+            </nav>
+            
+           
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Find Services Near You</h1>
+            <p>Discover the best hospitals, colleges, restaurants, and more in your neighborhood with just a few clicks.</p>
+            
+            
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Explore a wide range of services available on our platform</p>
+            </div>
+            
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="service-icon">🏥</div>
+                    <h3>Hospitals</h3>
+                    <p>Find the best hospitals and medical facilities near you with ratings and reviews from other users.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🎓</div>
+                    <h3>Colleges</h3>
+                    <p>Discover top educational institutions in your area with detailed information about courses and facilities.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🍔</div>
+                    <h3>Restaurants</h3>
+                    <p>Explore delicious dining options nearby with menus, photos, and customer reviews.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🛒</div>
+                    <h3>Shopping</h3>
+                    <p>Find the best shopping centers and retail stores in your neighborhood for all your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Simple steps to find the services you need</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Account</h3>
+                    <p>Sign up for free and create your personal profile to get started.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Search Services</h3>
+                    <p>Enter your location and search for the services you need nearby.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Compare & Choose</h3>
+                    <p>Compare options based on ratings, reviews, and features to make the best choice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Join Our Community Today</h2>
+            <p>Register now to find the best services in your area or list your business to reach more customers.</p>
+            
+           
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What People Say</h2>
+                <p>Hear from our satisfied users and service providers</p>
+            </div>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"LocalConnect helped me find the perfect college near my home. The detailed information and user reviews made my decision much easier."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="User Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <p>Student</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As a hospital administrator, listing our facility on LocalConnect has increased our visibility significantly. The platform is easy to use and brings us qualified patients."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="Service Provider Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Dr. Michael Chen</h4>
+                            <p>Hospital Director</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I moved to a new city and LocalConnect made it so easy to find all the essential services around me. Highly recommended for anyone relocating!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="User Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Robert Garcia</h4>
+                            <p>New Resident</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>LocalConnect</h3>
+                    <p>Your one-stop platform to find and list local services in your neighborhood.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">f</a>
+                        <a href="#" class="social-icon">t</a>
+                        <a href="#" class="social-icon">in</a>
+                        <a href="#" class="social-icon">ig</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>For Users</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Search Services</a></li>
+                        <li><a href="#">Register Account</a></li>
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">Write Reviews</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>For Providers</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">List Your Business</a></li>
+                        <li><a href="#">Business Dashboard</a></li>
+                        <li><a href="#">Pricing Plans</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 LocalConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

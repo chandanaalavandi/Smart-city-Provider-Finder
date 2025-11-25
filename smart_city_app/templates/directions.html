@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Directions</title>
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCyzs_FRtMORUoJKpoHOMw4kaYsUVLlzw&callback=initMap&v=weekly&solution_channel=GMP_CCS_textdirections_v2"
+    defer>
+  </script>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const shopLat = parseFloat(urlParams.get("lat"));
+    const shopLng = parseFloat(urlParams.get("lng"));
+    const shopName = decodeURIComponent(urlParams.get("name") || "Shop");
+
+    let map, userMarker, directionsService, directionsRenderer;
+
+    function initMap() {
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer();
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 14,
+        center: { lat: shopLat, lng: shopLng } // Center temporarily on shop
+      });
+
+      directionsRenderer.setMap(map);
+
+      // Add static marker for the shop
+      new google.maps.Marker({
+        position: { lat: shopLat, lng: shopLng },
+        map,
+        title: shopName
+      });
+
+      // Watch user's live location
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          position => {
+            const userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            console.log("User location:", position.coords.latitude, position.coords.longitude);
+
+            // Move or create user's marker
+            if (!userMarker) {
+              userMarker = new google.maps.Marker({
+                position: userLocation,
+                map: map,
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 6,
+                  fillColor: "#00F",
+                  fillOpacity: 1,
+                  strokeWeight: 1
+                },
+                title: "You"
+              });
+            } else {
+              userMarker.setPosition(userLocation);
+            }
+
+            // Update map center
+            map.setCenter(userLocation);
+
+            // Update directions
+            directionsService.route({
+              origin: userLocation,
+              destination: { lat: shopLat, lng: shopLng },
+              travelMode: "DRIVING"
+            }, (result, status) => {
+              if (status === "OK") {
+                directionsRenderer.setDirections(result);
+              } else {
+                console.warn("Directions request failed due to " + status);
+              }
+            });
+          },
+          error => {
+            alert("Failed to get your location: " + error.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+      } else {
+        alert("Geolocation is not supported.");
+      }
+    }
+  </script>
+</body>
+</html>

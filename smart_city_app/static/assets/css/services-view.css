@@ -1,0 +1,258 @@
+.hotel-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.hotel-card {
+    display: flex;
+    flex-direction: row;
+    background: linear-gradient(135deg, #f5f7fa, #e3eaf2); /* soft blue/gray gradient */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.hotel-images {
+    flex: 0 0 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    padding:15px
+}
+
+.thumbnail-container {
+    display: flex;
+    height: 70px;
+}
+
+.thumbnail {
+    flex: 1;
+    object-fit: cover;
+    border: 1px solid white;
+}
+
+.view-all {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.hotel-info {
+    flex: 0 0 45%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sponsored {
+    display: inline-block;
+    background-color: #888;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.sponsored::before {
+    content: "↗ ";
+}
+
+.hotel-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.rating {
+    color: #222;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stars {
+    color: black;
+    letter-spacing: -2px;
+}
+
+.location {
+    color: #0066cc;
+    margin-bottom: 5px;
+}
+
+.location-detail {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.couple-friendly {
+    display: inline-block;
+    border: 1px solid #888;
+    color: #555;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.benefits {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 10px;
+    color: #006655;
+    font-size: 14px;
+}
+
+.benefits::before {
+    content: "•";
+    margin-right: 10px;
+}
+
+.price-section {
+    flex: 0 0 25%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid #eee;
+    text-align: right;
+}
+
+.rating-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.rating-word {
+    color: #0066cc;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.rating-score {
+    background-color: #0066cc;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.review-count {
+    color: #555;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.deal-badge {
+    display: inline-block;
+    color: #00aa88;
+    border: 1px solid #00aa88;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 14px;
+    margin-top: 10px;
+    align-self: flex-end;
+}
+
+.old-price {
+    color: #888;
+    text-decoration: line-through;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.current-price {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.taxes {
+    color: #555;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.per-night {
+    color: #555;
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.book-button {
+    background-color: white;
+    color: #0066cc;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+    .hotel-card {
+        flex-direction: column;
+    }
+
+    .hotel-images {
+        flex: 0 0 auto;
+    }
+
+    .hotel-info, .price-section {
+        flex: 0 0 auto;
+        border-left: none;
+    }
+
+    .price-section {
+        text-align: left;
+        padding-top: 0;
+    }
+
+    .rating-container {
+        align-items: flex-start;
+    }
+
+    .deal-badge {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-image {
+        height: 150px;
+    }
+
+    .thumbnail-container {
+        height: 50px;
+    }
+
+    .hotel-name {
+        font-size: 18px;
+    }
+
+    .current-price {
+        font-size: 22px;
+    }
+}
